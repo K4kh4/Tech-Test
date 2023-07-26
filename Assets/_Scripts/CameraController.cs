@@ -7,17 +7,20 @@ public class CameraController : MonoBehaviour
     [SerializeField] Vector2 minMaxZoom = new Vector2(3, 6);
 
     Camera _cam;
-    private float _speed = 5f;
+    private float _speed = 10f;
 
     private float _minX = -10, _maxX= 10,
                     _minY =-10, _maxY = 10;
 
     private SpriteRenderer _BackGround;
+    private Vector3 _targetPos;
+    private float _targetZoom;
     private void Awake()
     {
         _cam = GetComponent<Camera>();
         GameManager.Instance.OnLevelLoaded +=OnLevelLoaded;
-        targetPos = transform.position;
+        _targetPos = transform.position;
+        _targetZoom = _cam.orthographicSize;
         InputManager.Instance.OnDrag += Move;
         InputManager.Instance.OnZoom += Zoom;
       
@@ -30,33 +33,32 @@ public class CameraController : MonoBehaviour
     }
     public void UpdateBounds()
     {
-        _minX = _BackGround.bounds.min.x+_cam.orthographicSize*_cam.aspect;
-        _maxX = _BackGround.bounds.max.x-_cam.orthographicSize*_cam.aspect;
-        _minY = _BackGround.bounds.min.y+_cam.orthographicSize;
-        _maxY = _BackGround.bounds.max.y-_cam.orthographicSize;
+        _minX = _BackGround.bounds.min.x+_targetZoom*_cam.aspect;
+        _maxX = _BackGround.bounds.max.x-_targetZoom*_cam.aspect;
+        _minY = _BackGround.bounds.min.y+_targetZoom;
+        _maxY = _BackGround.bounds.max.y-_targetZoom;
     }
 
 
-    Vector3 _origin;
-    private Vector3 targetPos;
+    
     public void Move(Vector3 posiition)
     {
         Vector3 delta = posiition;
         delta.z = 0;
        
-        targetPos = transform.position + delta;
+        _targetPos = transform.position + delta;
     }
     private void LateUpdate()
     {
-        targetPos.x = Mathf.Clamp(targetPos.x,_minX,_maxX);
-        targetPos.y = Mathf.Clamp(targetPos.y,_minY,_maxY);
-        transform.position = Vector3.Lerp(transform.position, targetPos, _speed * Time.deltaTime);
-
+        _targetPos.x = Mathf.Clamp(_targetPos.x,_minX,_maxX);
+        _targetPos.y = Mathf.Clamp(_targetPos.y,_minY,_maxY);
+        transform.position = Vector3.Lerp(transform.position, _targetPos, _speed * Time.deltaTime);
+        _cam.orthographicSize = Mathf.Lerp(_cam.orthographicSize,_targetZoom,_speed*Time.deltaTime);
     }
 
     private void Zoom(float amount)
     {
-        _cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize + amount / 10, minMaxZoom.x, minMaxZoom.y);
+        _targetZoom = Mathf.Clamp(_cam.orthographicSize + amount / 10, minMaxZoom.x, minMaxZoom.y);
         UpdateBounds();
     }
 }

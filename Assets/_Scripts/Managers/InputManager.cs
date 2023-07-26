@@ -25,50 +25,77 @@ public class InputManager : Singleton<InputManager>
     }
 
     private Vector3 _origin = Vector3.zero;
+    private float _startZoom;
     Camera _mainCam;
     private Vector3 mousePosition => _mainCam.ScreenToWorldPoint(Input.mousePosition);
+    private Vector3 touchPosition => _mainCam.ScreenToWorldPoint(Input.GetTouch(0).position);
     void Start()
     {
         UILayer = LayerMask.NameToLayer("UI");
         _mainCam = Camera.main;
+        
     }
 
     void Update()
     {
         if (IsPointerOverUIElement())
             return;
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
 
-        if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0))
+                {
+                    OnTouch?.Invoke(mousePosition);
+                    _origin = mousePosition;
+                }
+                if (Input.GetMouseButton(0))
+                {
+                    _timeHeld += Time.deltaTime;
+                    if (_holding)
+                    {
+                        OnDrag?.Invoke(_origin - mousePosition);
+
+                    }
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    _timeHeld = 0;
+                }
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    _origin = mousePosition;
+                }
+                if (Input.GetMouseButton(1))
+                {
+
+                    OnZoom?.Invoke(_origin.y - mousePosition.y);
+                }
+
+        #endif
+        if (Input.touchCount<1)
+        return;
+        
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            OnTouch?.Invoke(mousePosition);
-            _origin = mousePosition;
+            OnTouch?.Invoke(touchPosition);
+            _origin = touchPosition;
         }
-        if (Input.GetMouseButton(0))
+        if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
-            _timeHeld += Time.deltaTime;
-            if (_holding)
+
+            OnDrag?.Invoke(_origin - touchPosition);
+
+        }
+        if (Input.touches.Length > 1)
+        {
+            if (Input.GetTouch(1).phase == TouchPhase.Began)
             {
-                OnDrag?.Invoke(_origin - mousePosition);
-
+                _startZoom = (touchPosition - _mainCam.ScreenToWorldPoint(Input.GetTouch(1).position)).magnitude;
+                //_origin = touchPosition;
             }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            _timeHeld = 0;
+            OnZoom?.Invoke(_startZoom - (touchPosition - _mainCam.ScreenToWorldPoint(Input.GetTouch(1).position)).magnitude);
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            _origin = mousePosition;
-        }
-        if (Input.GetMouseButton(1))
-        {
-
-            OnZoom?.Invoke(_origin.y - mousePosition.y);
-        }
-
-#endif
     }
 
     public bool IsPointerOverUIElement()

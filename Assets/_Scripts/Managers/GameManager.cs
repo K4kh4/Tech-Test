@@ -51,6 +51,7 @@ public class GameManager : Singleton<GameManager>
             goalTrackers.Add(g.type, new GoalTracker(g));
             ui.SetUpGoal(goalTrackers[g.type]);
         }
+        ui.OnGameStart();
          ui.UpdateMainGoal(_itemsFound,_itemsToFind);
     }
 

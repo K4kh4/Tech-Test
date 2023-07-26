@@ -18,15 +18,18 @@ public class UiManager : MonoBehaviour
 
     [Header("Goals")]
     [SerializeField] private GoalDisplay _goalDisplayPrefab;
-    [SerializeField] private Transform _goalHolder;
+    [SerializeField] private RectTransform _goalHolder;
     [SerializeField] private Image _mainGoalBar;
     [SerializeField] private TextMeshProUGUI _mainGoaltext;
 
 
     public void OnGameStart()
     {
-
+        
         _levelName.text = GameManager.Instance.currentLevel.name;
+        Rect temp = _goalHolder.rect;
+        temp.width= _goalHolder.childCount *( _goalDisplayPrefab.GetComponent<RectTransform>().rect.width + 50);
+        _goalHolder.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,_goalHolder.childCount *( _goalDisplayPrefab.GetComponent<RectTransform>().rect.width + 50));
     }
 
 
