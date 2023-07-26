@@ -25,8 +25,9 @@ public class ItemScript : MonoBehaviour
     public void OnClick()
     {
         OnRemove?.Invoke(this, transform.position);
-        transform.DOScale(Vector3.zero, popAnimTime).OnComplete(() => Destroy(gameObject));
+       // transform.DOScale(Vector3.zero, popAnimTime).OnComplete(() => Destroy(gameObject));
         OnRemove-=GameManager.Instance.ItemRemoved;
+        Destroy(gameObject);
     }
 
 

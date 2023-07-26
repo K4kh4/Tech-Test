@@ -63,6 +63,7 @@ public class GameManager : Singleton<GameManager>
         {
             LevelComplited();
         }
+        ui.SpawnCorrectFx(goalTrackers[item.itemType],position);
         ui.UpdateMainGoal(_itemsFound,_itemsToFind);
     }
 

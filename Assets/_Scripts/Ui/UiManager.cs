@@ -21,11 +21,13 @@ public class UiManager : MonoBehaviour
     [SerializeField] private RectTransform _goalHolder;
     [SerializeField] private Image _mainGoalBar;
     [SerializeField] private TextMeshProUGUI _mainGoaltext;
-
+    [Header("fx")]
+    [SerializeField] private Image itemfx; 
+    private Camera  _mainCam;
 
     public void OnGameStart()
     {
-        
+        _mainCam = Camera.main;
         _levelName.text = GameManager.Instance.currentLevel.name;
         Rect temp = _goalHolder.rect;
         temp.width= _goalHolder.childCount *( _goalDisplayPrefab.GetComponent<RectTransform>().rect.width + 50);
@@ -39,6 +41,7 @@ public class UiManager : MonoBehaviour
         GoalDisplay g = Instantiate(_goalDisplayPrefab, _goalHolder);
         g.SetUp(tracker, GameManager.Instance.itemData.items[(int)tracker.type].icon);
         tracker.OnItemRemoved += g.UpdateDisplay;
+        tracker.display =  g;
     }
 
     public void HideBottomBar()
@@ -64,30 +67,29 @@ public class UiManager : MonoBehaviour
         _mainGoalBar.DOFillAmount ((float)current/total,.1f) ;
     }
 
-    public void SpawnCorrectFx()
+    public void SpawnCorrectFx(GoalTracker goal,Vector3 pos)
     {
-        // Vector3 goalPosition = _coinDisplay.transform.position;
-        // // goalPosition = Camera.main.ScreenToWorldPoint(goalPosition);
-        // //goalPosition = WorldPositionToScreenSpaceCameraPosition(canvas, goalPosition);
+        Vector3 goalPosition = goal.display.transform.position;
+       
+        Vector3 screenPoint = _mainCam.WorldToScreenPoint(pos);
+        Image temp = Instantiate(itemfx, screenPoint, Quaternion.identity);
+        temp.sprite = GameManager.Instance.itemData.items[(int)goal.type].icon;
+        temp.transform.SetParent(this.transform);
 
-        // GameObject temp = Instantiate(coinFx, Vector3.zero, Quaternion.identity);
-        // temp.transform.SetParent(this.transform);
-
-        // Vector3 screenPoint = _currentCoinDisplay.transform.position;
-        // screenPoint.x += UnityEngine.Random.Range(-150f, 150f);
-        // screenPoint.y += UnityEngine.Random.Range(-150f, 150f);
-        // temp.transform.position = screenPoint;
-        // Sequence ms = DOTween.Sequence();
-        // Vector3 scale = temp.transform.localScale;
-        // temp.transform.localScale = Vector3.zero;
-        // ms.Append(temp.transform.DOScale(scale, .2f));
-        // ms.AppendInterval((UnityEngine.Random.Range(.5f, 1f)));
-        // ms.Append(temp.transform.DOMove(goalPosition, .5f).SetDelay(UnityEngine.Random.Range(0, .1f)).OnComplete(() =>
+        Vector3 scale = temp.transform.localScale;
+       
+        Sequence ms = DOTween.Sequence();
+        // ms.Append(temp.transform.DOPunchScale(scale , .2f));
+        // ms.Append(temp.transform.DOJump(goalPosition, 300 ,1, .4f)).OnComplete(() =>
         // {
         //     Destroy(temp.gameObject);
-        //     PowerUpManager.Instance.Coin++;
-        //     AudioManager.Instance.CoinFX();
-        // }));
+        // });
+        // ms.Join(temp.transform.DOScale(scale,.4f));
+       // temp.transform.DOScale(scale*.8f,.5f);
+        temp.transform.DOJump(goalPosition, 300 ,1, .5f).OnComplete(() =>
+        {
+            Destroy(temp.gameObject);
+        });
     }
 }
 

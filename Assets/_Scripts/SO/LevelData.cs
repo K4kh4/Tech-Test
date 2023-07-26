@@ -29,6 +29,7 @@ public class GoalTracker
     public string name;
     public ItemType type;
     public int count;
+    public GoalDisplay display;
     public event System.Action<int> OnItemRemoved;
     public  GoalTracker(Goal g)
     {
