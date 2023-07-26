@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4980591407171055858}
   - component: {fileID: 4980591407171055856}
   - component: {fileID: 4980591407171055859}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Alien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -206175207
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e49282fada010f948b5af373eb175dde, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -95,10 +95,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4980591407171055852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef36b68e649cb6746870fbcf2b36fdc6, type: 3}
+  m_Script: {fileID: 11500000, guid: e2995a026a3244002bbdd47aceafd015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: 13fef2595321b07419c01a1d0e9ba799, type: 2}
+  itemType: 0
+  popAnimTime: 0.4
 --- !u!60 &4980591407171055859
 PolygonCollider2D:
   m_ObjectHideFlags: 0

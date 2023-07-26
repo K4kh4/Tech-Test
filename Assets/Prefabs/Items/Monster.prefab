@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6348148745374803436}
   - component: {fileID: 6348148745374803438}
   - component: {fileID: 6348148745374803437}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -206175207
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 18b3c1b4a541ce54cb35d6d9a7ce1960, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -95,10 +95,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6348148745374803442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef36b68e649cb6746870fbcf2b36fdc6, type: 3}
+  m_Script: {fileID: 11500000, guid: e2995a026a3244002bbdd47aceafd015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: 7c8871263fa1b514bbea7287331238d6, type: 2}
+  itemType: 0
+  popAnimTime: 0.4
 --- !u!60 &6348148745374803437
 PolygonCollider2D:
   m_ObjectHideFlags: 0
