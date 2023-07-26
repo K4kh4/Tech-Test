@@ -7,12 +7,14 @@ public class InputManager : Singleton<InputManager>
 {
 
     public event System.Action<Vector3> OnTouch;
+        public event System.Action<Vector3> OnTouchEnd;
+
 
     public event System.Action<Vector3> OnDrag;
 
     public event System.Action<float> OnZoom;
 
-    private float _timeToHold = .15f;
+    private float _timeToHold = .1f;
     private int UILayer;
 
     private float _timeHeld;
@@ -40,38 +42,38 @@ public class InputManager : Singleton<InputManager>
     {
         if (IsPointerOverUIElement())
             return;
-        #if UNITY_EDITOR
+        // #if UNITY_EDITOR
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    OnTouch?.Invoke(mousePosition);
-                    _origin = mousePosition;
-                }
-                if (Input.GetMouseButton(0))
-                {
-                    _timeHeld += Time.deltaTime;
-                    if (_holding)
-                    {
-                        OnDrag?.Invoke(_origin - mousePosition);
+        //         if (Input.GetMouseButtonDown(0))
+        //         {
+        //             OnTouch?.Invoke(mousePosition);
+        //             _origin = mousePosition;
+        //         }
+        //         if (Input.GetMouseButton(0))
+        //         {
+        //             _timeHeld += Time.deltaTime;
+        //             if (_holding)
+        //             {
+        //                 OnDrag?.Invoke(_origin - mousePosition);
 
-                    }
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    _timeHeld = 0;
-                }
+        //             }
+        //         }
+        //         if (Input.GetMouseButtonUp(0))
+        //         {
+        //             _timeHeld = 0;
+        //         }
 
-                if (Input.GetMouseButtonDown(1))
-                {
-                    _origin = mousePosition;
-                }
-                if (Input.GetMouseButton(1))
-                {
+        //         if (Input.GetMouseButtonDown(1))
+        //         {
+        //             _origin = mousePosition;
+        //         }
+        //         if (Input.GetMouseButton(1))
+        //         {
 
-                    OnZoom?.Invoke(_origin.y - mousePosition.y);
-                }
+        //             OnZoom?.Invoke(_origin.y - mousePosition.y);
+        //         }
 
-        #endif
+        // #endif
         if (Input.touchCount<1)
         return;
         
@@ -80,12 +82,19 @@ public class InputManager : Singleton<InputManager>
             OnTouch?.Invoke(touchPosition);
             _origin = touchPosition;
         }
-        if (Input.GetTouch(0).phase == TouchPhase.Moved)
+        if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)
         {
-
-            OnDrag?.Invoke(_origin - touchPosition);
+             _timeHeld += Time.deltaTime;
+             OnDrag?.Invoke(_origin - touchPosition);   
 
         }
+         if (Input.GetTouch(0).phase == TouchPhase.Ended && Input.touches.Length <2)
+        {
+           if (!_holding)
+                OnTouchEnd?.Invoke(touchPosition);
+           _timeHeld=0;
+        }
+        
         if (Input.touches.Length > 1)
         {
             if (Input.GetTouch(1).phase == TouchPhase.Began)

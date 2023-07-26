@@ -34,6 +34,14 @@ public class GameManager : Singleton<GameManager>
     }
     public void LevelComplited()
     {
+        StartCoroutine(LevelCleared());
+    }
+
+    IEnumerator LevelCleared()
+    {
+        yield return new WaitForSeconds(1);
+        ui.OnLevelCleared();
+        
     }
 
     public void SetUpLevel()
