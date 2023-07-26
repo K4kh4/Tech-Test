@@ -15,10 +15,10 @@ MonoBehaviour:
   items:
   - name: Alien
     type: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: e49282fada010f948b5af373eb175dde, type: 3}
   - name: Monster
     type: 1
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 18b3c1b4a541ce54cb35d6d9a7ce1960, type: 3}
   - name: UFO
     type: 2
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 7cab74f6f368e3b499aadaad9351f447, type: 3}

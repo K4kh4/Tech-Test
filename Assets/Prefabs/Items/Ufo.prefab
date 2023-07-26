@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2995a026a3244002bbdd47aceafd015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
+  itemType: 2
   popAnimTime: 0.4
 --- !u!60 &3302427971367045918
 PolygonCollider2D:

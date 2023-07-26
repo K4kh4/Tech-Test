@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : Singleton<InputManager>
 {
@@ -12,6 +13,7 @@ public class InputManager : Singleton<InputManager>
     public event System.Action<float> OnZoom;
 
     private float _timeToHold = .15f;
+    private int UILayer;
 
     private float _timeHeld;
     private bool _holding
@@ -27,12 +29,14 @@ public class InputManager : Singleton<InputManager>
     private Vector3 mousePosition => _mainCam.ScreenToWorldPoint(Input.mousePosition);
     void Start()
     {
+        UILayer = LayerMask.NameToLayer("UI");
         _mainCam = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (IsPointerOverUIElement())
+            return;
 #if UNITY_EDITOR
 
         if (Input.GetMouseButtonDown(0))
@@ -65,5 +69,30 @@ public class InputManager : Singleton<InputManager>
         }
 
 #endif
+    }
+
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == UILayer)
+                return true;
+        }
+        return false;
+    }
+
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 }

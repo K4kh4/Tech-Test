@@ -19,13 +19,14 @@ public class ItemScript : MonoBehaviour
 
     public void SetUp()
     {
-       // OnRemove += GameManager.Instance.OnItemRemoved;
+        OnRemove += GameManager.Instance.ItemRemoved;
     }
 
     public void OnClick()
     {
         OnRemove?.Invoke(this, transform.position);
-        transform.DOScale(Vector3.zero, popAnimTime).OnComplete(() => Destroy(gameObject)).SetEase(Ease.InOutBounce);
+        transform.DOScale(Vector3.zero, popAnimTime).OnComplete(() => Destroy(gameObject));
+        OnRemove-=GameManager.Instance.ItemRemoved;
     }
 
 

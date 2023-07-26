@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9cf7ca33846042e0ae595ed2c2d6ee8, type: 3}
+  m_Name: LevelData
+  m_EditorClassIdentifier: 
+  levels:
+  - name: Alien Invension
+    goals:
+    - type: 0
+      count: 3
+    - type: 1
+      count: 3
+    - type: 2
+      count: 3
+    prefab: {fileID: 1001368941619806915, guid: d5a68f97af7621d4ba79f27eaf9a213b, type: 3}

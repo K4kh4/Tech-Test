@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public SpriteRenderer temp;
     [SerializeField] Vector2 minMaxZoom = new Vector2(3, 6);
 
     Camera _cam;
@@ -13,21 +12,28 @@ public class CameraController : MonoBehaviour
     private float _minX = -10, _maxX= 10,
                     _minY =-10, _maxY = 10;
 
-    private void Start()
+    private SpriteRenderer _BackGround;
+    private void Awake()
     {
         _cam = GetComponent<Camera>();
+        GameManager.Instance.OnLevelLoaded +=OnLevelLoaded;
         targetPos = transform.position;
         InputManager.Instance.OnDrag += Move;
         InputManager.Instance.OnZoom += Zoom;
-        UpdateBounds();
+      
     }
 
+    public void OnLevelLoaded(SpriteRenderer bg)
+    {
+        _BackGround = bg;
+        UpdateBounds();
+    }
     public void UpdateBounds()
     {
-        _minX = temp.bounds.min.x+_cam.orthographicSize*_cam.aspect;
-        _maxX = temp.bounds.max.x-_cam.orthographicSize*_cam.aspect;
-        _minY = temp.bounds.min.y+_cam.orthographicSize;
-        _maxY = temp.bounds.max.y-_cam.orthographicSize;
+        _minX = _BackGround.bounds.min.x+_cam.orthographicSize*_cam.aspect;
+        _maxX = _BackGround.bounds.max.x-_cam.orthographicSize*_cam.aspect;
+        _minY = _BackGround.bounds.min.y+_cam.orthographicSize;
+        _maxY = _BackGround.bounds.max.y-_cam.orthographicSize;
     }
 
 
